@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>ChromePort Ultimate</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#131e30;--panel2:#19263b;--line:#2a3a52;--text:#edf3fb;--muted:#9aabc1;--green:#4adea3;--blue:#78aaff;--amber:#f6c76b;--red:#ff8585}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 85% -10%,#1d3554 0,transparent 65%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:22px max(20px,calc((100vw - 1120px)/2));border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#4adea3,#4e91ff);display:grid;place-items:center;color:#071321;font-weight:900;font-size:20px}
+h1{font-size:20px;margin:0}.sub{color:var(--muted);font-size:12px}.pill{border:1px solid #28634f;color:var(--green);padding:5px 10px;border-radius:99px;font-size:12px}
+main{max-width:1120px;margin:28px auto;padding:0 20px 60px}.hero{margin-bottom:24px}.hero h2{font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0 0 10px}.hero p{color:var(--muted);max-width:720px;margin:0}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.card{background:linear-gradient(180deg,#172438,#111b2b);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 12px 35px #0002}.card h3{margin:0 0 5px;font-size:17px}.muted{color:var(--muted)}.small{font-size:12px}
+.drop{margin-top:16px;border:1.5px dashed #49617e;border-radius:14px;padding:28px 18px;text-align:center;background:#0c1727;transition:.2s}.drop.over{border-color:var(--green);background:#102b29}.drop strong{display:block;margin:8px 0 3px}
+button,.filebtn{border:0;border-radius:10px;background:var(--green);color:#082018;font-weight:750;padding:10px 15px;cursor:pointer;font-size:14px}button.secondary{background:#253650;color:var(--text);border:1px solid #3a4c66}button:disabled{opacity:.45;cursor:not-allowed}input[type=file]{display:none}
+.actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:15px}.result{margin-top:16px;display:none}.result.show{display:block}.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:13px}.stat{background:#0c1727;border:1px solid #25364e;padding:12px;border-radius:11px}.stat label{display:block;color:var(--muted);font-size:11px}.stat b{display:block;margin-top:3px;overflow-wrap:anywhere}.notice{border-left:3px solid var(--amber);padding:10px 12px;background:#342b1b55;color:#f3d69b;border-radius:5px;margin-top:13px;font-size:13px}
+.status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.steps{display:grid;gap:10px;margin-top:15px}.step{display:flex;gap:12px;align-items:flex-start;padding:12px;background:#0c1727;border:1px solid #25364e;border-radius:12px}.num{flex:0 0 25px;height:25px;border-radius:8px;background:#233c56;color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:12px}.step b{display:block}.step p{margin:2px 0 0;color:var(--muted);font-size:12px}
+.remote{margin-top:18px}.remoteBox{margin-top:13px;min-height:170px;border:1px dashed #40536d;border-radius:13px;background:#0a1422;display:grid;place-items:center;text-align:center;padding:22px}.remoteBox svg{opacity:.8}.remoteBox p{max-width:520px;color:var(--muted);font-size:13px}.tag{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:7px;color:var(--muted);font-size:11px;margin:3px}
+footer{max-width:1120px;margin:0 auto;padding:0 20px 30px;color:#7f91a9;font-size:11px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}header{padding:16px 20px}.statgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">CP</div><div><h1>ChromePort Ultimate</h1><div class="sub">Windows apps · depuis ChromeOS</div></div></div><span class="pill">FREE EDITION · v1.0 alpha</span></header>
+<main>
+<section class="hero"><h2>Ton poste Windows, dans le navigateur.</h2><p>Analyse tes installateurs localement, puis prépare une session Windows distante. Aucun logiciel à installer sur ton Chromebook.</p></section>
+<div class="grid">
+<section class="card">
+<h3>1. Analyseur EXE / MSI</h3><div class="muted small">Le fichier reste sur ton appareil : aucune transmission réseau n'est effectuée par cette analyse.</div>
+<div class="drop" id="drop"><div style="font-size:30px">⇧</div><strong>Dépose un fichier EXE ou MSI ici</strong><div class="muted small">ou sélectionne-le depuis tes fichiers</div><div class="actions"><label class="filebtn" for="file">Choisir un fichier</label><input id="file" type="file" accept=".exe,.msi,application/octet-stream"></div></div>
+<div class="result" id="result" aria-live="polite">
+<div class="status"><span class="dot" id="dot"></span><span id="resultTitle">Analyse terminée</span></div>
+<div class="statgrid">
+<div class="stat"><label>Fichier</label><b id="rName">—</b></div>
+<div class="stat"><label>Type détecté</label><b id="rType">—</b></div>
+<div class="stat"><label>Architecture</label><b id="rArch">—</b></div>
+<div class="stat"><label>Taille</label><b id="rSize">—</b></div>
+</div><div class="notice" id="rNote"></div>
+<div class="actions"><button class="secondary" id="export">Exporter le rapport TXT</button></div>
+</div>
+</section>
+<section class="card">
+<h3>2. État du moteur distant</h3>
+<div class="status" style="margin-top:12px"><span class="dot"></span><span>Moteur Windows non configuré</span></div>
+<div class="remoteBox">
+<div><div style="font-size:35px">☁</div><b>Aucune machine Windows connectée</b><p>GitHub Pages peut héberger cette interface, mais ne fournit pas de machine Windows. Le bureau distant s'activera lorsqu'un serveur autorisé sera disponible.</p><span class="tag">RDP / Guacamole</span><span class="tag">WebRTC</span><span class="tag">Clavier & souris</span></div>
+</div>
+<div class="notice">Ne téléverse pas de fichiers personnels ou sensibles vers un serveur tiers. Le transfert sera désactivé tant qu'une passerelle authentifiée et sécurisée ne sera pas configurée.</div>
+</section>
+</div>
+<section class="card remote">
+<h3>3. Feuille de route</h3><div class="steps">
+<div class="step"><span class="num">01</span><div><b>Interface et analyse locale — prototype présent</b><p>Détection des signatures PE/CFB, architecture PE et rapport local.</p></div></div>
+<div class="step"><span class="num">02</span><div><b>Analyse approfondie MSI</b><p>Décodage StringPool/StringData et tables Property, File, Component, Feature et LaunchCondition.</p></div></div>
+<div class="step"><span class="num">03</span><div><b>Passerelle distante sécurisée</b><p>Authentification, sessions isolées et transfert de fichiers explicitement autorisé.</p></div></div>
+<div class="step"><span class="num">04</span><div><b>Bureau Windows dans le navigateur</b><p>Connexion via une passerelle RDP HTML5 (par exemple Apache Guacamole), puis clavier/souris et affichage en direct.</p></div></div>
+</div></section>
+</main>
+<footer>ChromePort Ultimate est un prototype indépendant. Il n'exécute aucun EXE/MSI et ne fournit pas de machine Windows. Toute future session distante devra être autorisée, authentifiée et isolée.</footer>
+<script>
+const $=id=>document.getElementById(id);
+let currentReport='';
+function fmtSize(n){return n>=1024**2?(n/1024**2).toFixed(2)+' Mo':(n/1024).toFixed(1)+' Ko'}
+function ascii(buf,start=0,end=buf.byteLength){let out='';const v=new Uint8Array(buf,start,Math.max(0,end-start));for(let i=0;i<v.length;i++)out+=String.fromCharCode(v[i]);return out}
+function analyse(file){
+ const head=file.slice(0,Math.min(file.size,2*1024*1024));
+ return head.arrayBuffer().then(buf=>{
+  const u=new Uint8Array(buf), s=ascii(buf), name=file.name, ext=name.toLowerCase().split('.').pop();
+  let type='Format non reconnu',arch='Indéterminée',notes=[];
+  if(u[0]===0x4d&&u[1]===0x5a){
+   type='Exécutable Windows PE';
+   if(u.length>=64){const peoff=new DataView(buf).getUint32(0x3c,true);if(peoff+6<=u.length&&ascii(buf,peoff,peoff+4)==='PE\u0000\u0000'){
+    const m=new DataView(buf).getUint16(peoff+4,true);
+    arch=({0x14c:'x86 (32 bits)',0x8664:'x64 (64 bits)',0x1c0:'ARM',0xaa64:'ARM64'})[m]||'Machine PE inconnue (0x'+m.toString(16)+')';
+   }else notes.push('Signature PE non trouvée dans les 2 premiers Mo.');}
+   notes.push('Signature MZ détectée. Un EXE Windows ne devient pas exécutable sur ChromeOS pour autant.');
+  }else if(u.length>=8&&u[0]===0xd0&&u[1]===0xcf&&u[2]===0x11&&u[3]===0xe0&&u[4]===0xa1&&u[5]===0xb1&&u[6]===0x1a&&u[7]===0xe1){
+   type='Conteneur OLE / Compound File (MSI possible)';
+   notes.push('Signature OLE détectée. Le format CFB seul ne garantit pas qu’il s’agit d’un MSI valide.');
+   notes.push('Le décodage des tables MSI nécessite un parseur complet.');
+  }else notes.push('Aucune signature EXE/PE ou OLE/CFB reconnue dans l’aperçu.');
+  if(ext==='msi'&&type.startsWith('Conteneur'))notes.push('Extension .msi cohérente avec le conteneur détecté.');
+  if(file.size>2*1024*1024)notes.push('Analyse limitée à un aperçu de 2 Mo pour préserver la mémoire du Chromebook.');
+  const report=[
+   'ChromePort Ultimate — rapport local',
+   'Fichier : '+file.name,'Taille : '+fmtSize(file.size),
+   'Type : '+type,'Architecture : '+arch,
+   'Notes :',...notes.map(x=>'- '+x),
+   'Aucun fichier n’a été envoyé ni exécuté.'
+  ].join('\n');
+  $('rName').textContent=file.name;$('rType').textContent=type;$('rArch').textContent=arch;$('rSize').textContent=fmtSize(file.size);
+  $('rNote').textContent=notes.join(' ');$('resultTitle').textContent='Analyse terminée — locale';$('result').classList.add('show');
+  currentReport=report;
+ }).catch(e=>{ $('result').classList.add('show');$('resultTitle').textContent='Erreur d’analyse';$('rNote').textContent=String(e);});
+}
+$('file').addEventListener('change',e=>{if(e.target.files[0])analyse(e.target.files[0]);});
+const drop=$('drop');
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over')});
+drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('over');const f=e.dataTransfer.files[0];if(f)analyse(f)});
+$('export').addEventListener('click',()=>{if(!currentReport)return;const blob=new Blob([currentReport],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ChromePort-rapport.txt';a.click();URL.revokeObjectURL(a.href)});
+</script>
+</body></html>
