@@ -1,0 +1,9 @@
+# Remplace par ton nom de domaine. Caddy gère le certificat TLS.
+remote.example.com {
+    reverse_proxy 127.0.0.1:8080
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        X-Frame-Options SAMEORIGIN
+    }
+}
